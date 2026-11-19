@@ -7,3 +7,4 @@
 | DEV-003 | 21.6 (`<stdio.h>`) | hal/hal_sim.c | Code de simulation hôte, non embarqué | — |
 | DEV-004 | 15.5 (un seul point de sortie) | src/* | retours anticipés des fonctions de garde (paramètres invalides, tampon trop petit) : lisibilité et contrôle immédiat | en attente d'approbation (enseignante) |
 | DEV-005 | 18.4 (pas d'arithmétique de pointeur) | src/frame.c | parcours et découpe de la trame JSON, bornés par `len` et contrôlés avant chaque accès | en attente d'approbation (enseignante) |
+| DEV-006 | 2.5 (macro `_POSIX_C_SOURCE` non utilisee dans le source), 21.1 (identifiants reserves), 21.10 (`<time.h>`) | src/main.c (bloc `TN_SIM`) | simulateur hote uniquement, non embarque ; `_POSIX_C_SOURCE` et `<time.h>` requis par les fonctions de temps POSIX du simulateur (a verifier dans main.c) | en attente d'approbation (enseignante) |
