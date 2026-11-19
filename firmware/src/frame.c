@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 uint16_t crc16_ccitt_false(const uint8_t *data, size_t len)
 {
@@ -58,6 +59,27 @@ size_t frame_build(uint8_t *out, size_t cap, const frame_t *f)
     return (size_t)n;
 }
 
+static bool parse_hex4(const char *s, uint16_t *out)
+{
+    uint32_t v = 0u;
+    for (size_t i = 0u; i < 4u; i++) {
+        uint32_t u = (uint32_t)s[i];
+        uint32_t d;
+        if ((u >= 48u) && (u <= 57u)) {
+            d = u - 48u;
+        } else if ((u >= 97u) && (u <= 102u)) {
+            d = u - 87u;
+        } else if ((u >= 65u) && (u <= 70u)) {
+            d = u - 55u;
+        } else {
+            return false;
+        }
+        v = (v << 4) | d;
+    }
+    *out = (uint16_t)v;
+    return true;
+}
+
 bool frame_crc_ok(const uint8_t *json, size_t len)
 {
     static const char key[] = ",\"crc\":\"";
@@ -79,7 +101,9 @@ bool frame_crc_ok(const uint8_t *json, size_t len)
     if ((pos + (sizeof(key) - 1u) + hexlen + 1u) > len) {
         return false;
     }
-    given = (uint16_t)strtoul((const char *)p + sizeof(key) - 1u, NULL, 16);
+    if (!parse_hex4((const char *)p + sizeof(key) - 1u, &given)) {
+        return false;
+    }
     rest = len - (pos + sizeof(key) - 1u + hexlen + 1u);
     (void)memcpy(tmp, json, pos);
     (void)memcpy(tmp + pos, json + pos + sizeof(key) - 1u + hexlen + 1u, rest);
@@ -104,7 +128,11 @@ bool json_get_int(const uint8_t *json, size_t len, const char *key, int32_t *val
     if ((*p != '-') && ((*p < '0') || (*p > '9'))) {
         return false;
     }
+    errno = 0;
     *value = (int32_t)strtol(p, NULL, 10);
+    if (errno != 0) {
+        return false;
+    }
     return true;
 }
 
