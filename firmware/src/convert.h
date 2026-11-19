@@ -10,6 +10,5 @@
 /* T(centi°C) = (ADC * 3,3 / 4096 - 0,5) * 100 ; *valid = false si code impossible ou hors plage */
 int32_t temp_from_adc(uint16_t adc, bool *valid);
 /* true si -40,00 <= centi <= 125,00 */
-bool    range_check(int32_t centi);
 
 #endif
