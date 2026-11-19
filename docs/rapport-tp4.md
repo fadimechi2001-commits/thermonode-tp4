@@ -83,7 +83,31 @@ Le score pylint de `gateway/gateway` est passé de **8,85 à 9,90 / 10**, avec l
 
 ## 7. Réponses aux questions Q1 à Q5
 
-[À COMPLÉTER : reprendre les réponses rédigées pour les questions Q1 à Q5 du sujet.]
+**Q1 : techniques ayant révélé les cinq problèmes de la MR EF-04.**
+- Seuil de sortie codé en dur (500 au lieu de 300) : révélé par un test à la main (`threshold_set(6000, 300)` puis `threshold_step(5699, true)`, qui doit donner CLEAR). La lecture seule ne suffit pas : c'est une technique dynamique.
+- Opérateur virgule (`ev = THR_CLEAR, above = 0u;`) : révélé par la lecture avec la liste de contrôle. Il n'est pas remonté par cppcheck dans la configuration utilisée.
+- Accolades retirées : révélées par cppcheck (règle MISRA 15.6). Analyse statique.
+- Test désactivé (`RUN_TEST` commenté) : révélé par la lecture du diff, en vérifiant le périmètre des tests. La CI reste verte, donc l'outil ne le voit pas.
+- `strncpy` sans terminateur : révélé par la lecture (chaînes et tampons) et confirmé par un test de validation (`node_id` sans terminateur).
+
+Complémentarité : l'analyse statique voit la forme du code (accolades, parenthèses, règles), l'exécution voit le comportement (seuil de 500 au lieu de 300). Une suite de tests verte n'est donc pas un certificat : elle ne voyait ni le seuil, ni le test désactivé.
+
+**Q2 : classement des 18 messages pylint.**
+- Défaut réel : R1727 (`handler.py`, détection de doublons désactivée par un `False` en dur). Non corrigé : décision à prendre avec l'enseignante.
+- Violations de norme corrigées : C0115 (docstrings, 5 occurrences), W0613 (arguments inutilisés des callbacks, 5 occurrences, renommés avec un préfixe `_`), C0207 (`maxsplit`), C0321 (instructions multiples).
+- Faux positif lié à l'environnement : E0401 (`paho-mqtt` absent de la VM), résolu par l'installation de `requirements.txt`, sans changement de code.
+- Dérogations justifiées, désactivées localement : C0103 (`do_GET`, nom imposé par `http.server`), R0913 (2 occurrences, signatures imposées ou justifiées), W0511 (TODO conservé et documenté).
+
+Pourquoi une désactivation locale est acceptable : elle ne porte que sur une ligne ou une fonction, avec une justification écrite à côté, visible en revue. Une désactivation globale dans `.pylintrc` masque la règle pour tout le projet, sans motif. L'équivalent MISRA est la suppression ciblée dans `firmware/misra-suppressions.txt`, justifiée par une entrée DEV-xxx dans `docs/misra-deviations.md`.
+
+**Q3 : asymétrie de couverture entre passerelle et firmware.**
+La passerelle Python est mesurée par Sonar (rapport `coverage-gw.xml`). Le firmware C a une couverture produite par la cible `coverage` du Makefile (gcovr), mais Sonar Community ne dispose pas d'analyseur C : les fichiers C sont exclus (`sonar.c.file.suffixes=-`), et la couverture C n'est pas importée. La porte de couverture du Quality Gate ne voit donc que la passerelle. C'est acceptable dans cette édition, à condition de le dire : le pipeline du TP5, qui exécute la cible `coverage`, vérifie le firmware. Pour que Sonar voie le firmware, il faudrait l'option B (plugin communautaire) ou l'édition Developer.
+
+**Q4 : `--force-with-lease` plutôt que `--force`, et tests verts malgré le changement de constante.**
+`--force-with-lease` refuse le push si la branche distante a changé depuis notre dernier fetch : on n'écrase que ce que l'on a vu. `--force` effacerait en silence un commit ajouté par un autre membre. Les tests passent encore parce que la valeur par défaut n'est pas testée : d'après la lecture, `setUp` de `test_threshold.c` passe des valeurs explicites, et `node_init` dans `test_node.c` ne vérifie pas l'hystérésis par défaut. Le test manquant est : « `threshold_init` applique `THR_DEFAULT_HYST` ». (À confirmer dans les fichiers avant de rendre le rapport.)
+
+**Q5 : versionnement sémantique.**
+`v0.2.0` est une version mineure : elle ajoute des fonctionnalités (configuration de l'hystérésis, outillage qualité) sans rupture de compatibilité. La correction d'un seul défaut sans changement d'interface relève d'une version corrective, `0.1.1`. Le jour où l'ICD change le format de trame, la compatibilité avec les nœuds et la passerelle existants est rompue : c'est une version majeure, `1.0.0`.
 
 ## 8. Dette technique et plan d'action
 
