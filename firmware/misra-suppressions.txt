@@ -2,3 +2,5 @@
 unusedFunction
 missingIncludeSystem
 *:test/*
+misra-c2012-15.5:src/*        # DEV-004 : retours anticipés dans les gardes (cf. docs/misra-deviations.md)
+misra-c2012-18.4:src/frame.c  # DEV-005 : parcours JSON borné par len (cf. docs/misra-deviations.md)
