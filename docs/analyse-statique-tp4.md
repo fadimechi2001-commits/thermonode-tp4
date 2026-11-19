@@ -2,4 +2,4 @@
 
 | Règle | Avant | Classe | Action | Commit |
 |---|---|---|---|---|
-| 13.3 | 1 | défaut réel | corriger | à compléter |
+| 13.3 | 1 | défaut réel | corriger | 956fa3f |
