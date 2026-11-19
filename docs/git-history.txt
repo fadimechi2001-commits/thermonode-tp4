@@ -1,0 +1,45 @@
+*   dd5594d (HEAD -> docs/git-history, origin/main, main) Merge pull request #5 from fadimechi2001-commits/docs/rapport-tp4
+|\  
+| * 6f187e7 (origin/docs/rapport-tp4, docs/rapport-tp4) docs(rapport): reponses Q1 a Q5
+| * d4d7cb3 docs(rapport): rapport TP4 (sections 1 a 5, parties 4 a 9 a completer)
+* |   e7f8f07 Merge pull request #4 from fadimechi2001-commits/feat/threshold-defaults-doc
+|\ \  
+| * | 0a517be (origin/feat/threshold-defaults-doc, feat/threshold-defaults-doc) feat(threshold): hysteresis par defaut a 400 (EF-04, retour terrain)
+| * | f01f9e9 (origin/fix/threshold-300, fix/threshold-300) fix(threshold): hysteresis par defaut a 300 (variante de test pour le conflit)
+| |/  
+* |   338ad21 (tag: v0.2.0) Merge pull request #3 from fadimechi2001-commits/docs/deviations
+|\ \  
+| * \   5a9eb95 (origin/docs/deviations, docs/deviations) merge: aligner docs/deviations sur main (derogations deja fusionnees via style/misra-required)
+| |\ \  
+| |/ /  
+|/| |   
+* | |   b691b09 Merge pull request #2 from fadimechi2001-commits/chore/pylint
+|\ \ \  
+| * | | 2e6b06d (origin/chore/pylint, chore/pylint) chore(pylint): docstrings, arguments inutilises, derogations justifiees (8.85 -> 9.90)
+| | |/  
+| |/|   
+* | |   617509c Merge pull request #1 from fadimechi2001-commits/style/misra-required
+|\ \ \  
+| |/ /  
+|/| |   
+| * | 5f3416d (origin/style/misra-required, style/misra-required) docs(analyse): bilan final MISRA (0 violation visible)
+| * | f49b4e5 style(misra): fonctions locales (8.7), derogation DEV-006 et suppressions (21.6, 21.1, 21.10, 2.5)
+| * | 94fa149 style(node): macro de periode utilisee, faux positif 7.4 justifie (MISRA 2.5, 7.4)
+| * | 15999b5 style: variables statiques rendues locales aux fonctions (MISRA 8.9)
+| * | f7ed164 docs(analyse): tableau MISRA a jour (10 restantes)
+| * | bfc68e6 style: identifiants a portee fichier uniques (MISRA 5.9)
+| * | 0a8ecf4 style: casts sur variables simples, pas sur expressions composites (MISRA 10.8)
+| * | 38e5c64 fix(frame): parseur hexadecimal explicite a la place de strtoul (MISRA 22.8/22.10)
+| * | 1177a26 docs(misra): deviations DEV-004 (15.5) et DEV-005 (18.4) avec suppressions ciblees
+| * | 0d6dd38 style(frame): verifier le retour de snprintf (MISRA 17.7)
+| * | 42233fc style: retours ignores rendus explicites (MISRA 17.7, memcpy/memset/strncpy)
+| * | 7046d61 docs(analyse): tableau MISRA mis à jour (57 restantes)
+| * | bca2a62 style: parentheses explicites pour la precedence (MISRA 12.1)
+| * | bc1c00c style(frame): une declaration par ligne (MISRA 12.3)
+| * | ff10ba3 docs(analyse): hash du commit MISRA 13.3
+| * | 956fa3f style(node): separer affectation et incrementation (MISRA 13.3)
+| * | 3eeae9d docs(analyse): ebauche du tableau de classement MISRA
+|/ /  
+| * 20ab11a docs(misra): deviations DEV-004 (15.5) et DEV-005 (18.4) avec suppressions ciblees
+|/  
+* 098ecc3 docs(review): revue de MR 7 - changements demandes
