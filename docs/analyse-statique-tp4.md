@@ -21,3 +21,10 @@ Base : 64 violations MISRA. Maintenant : 10 visibles, plus 32 dérogées (DEV-00
 | 2.5 | 1 | 1 | à examiner | voir node.c (set_period) | — |
 | 21.10 | 1 | 1 | dérogation | DEV-006 (à créer) | — |
 | 21.1 | 1 | 1 | dérogation | DEV-006 (à créer) | — |
+
+## Bilan final MISRA C:2012
+
+- Violations au départ : 64 ; après correction : 0 visible dans cppcheck.
+- Tests unitaires : 1 suite, 0 échec.
+- Dérogations documentées : DEV-002 (21.6), DEV-004 (15.5), DEV-005 (18.4), DEV-006 (2.5, 21.1, 21.10). DEV-004, DEV-005 et DEV-006 sont en attente d'approbation de l'enseignante.
+- Commits de correction : 17.7 (42233fc, 0d6dd38), 5.9 (bfc68e6), 10.8 (0a8ecf4), 8.9 (15999b5), 2.5 et 7.4 (94fa149), 22.8 et 22.10 (38e5c64), dérogations (1177a26), 12.1 (bca2a62), 12.3 (bc1c00c), 13.3 (956fa3f), 8.7 et suppressions (f49b4e5).
