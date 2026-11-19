@@ -1,0 +1,30 @@
+From 73aec37d2f48950a136c8dee196d987fc9ecbcc2 Mon Sep 17 00:00:00 2001
+From: Enseignante <ens@tn>
+Date: Thu, 19 Nov 2026 08:53:24 +0100
+Subject: [PATCH] =?UTF-8?q?chore(threshold):=20hyst=C3=A9r=C3=A9sis=20par?=
+ =?UTF-8?q?=20d=C3=A9faut=204=20=C2=B0C=20apr=C3=A8s=20retour=20terrain=20?=
+ =?UTF-8?q?(EF-04)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ firmware/src/threshold.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/firmware/src/threshold.h b/firmware/src/threshold.h
+index 3aef031..0947996 100644
+--- a/firmware/src/threshold.h
++++ b/firmware/src/threshold.h
+@@ -7,7 +7,7 @@
+ #define THR_MIN_CENTI     2000     /* 20 °C  (EF-07) */
+ #define THR_MAX_CENTI     10000    /* 100 °C (EF-07) */
+ #define THR_DEFAULT_HIGH  6000
+-#define THR_DEFAULT_HYST  500
++#define THR_DEFAULT_HYST  400
+ 
+ typedef enum { THR_NONE = 0, THR_RAISE, THR_CLEAR } thr_event_t;
+ 
+-- 
+2.43.0
+
