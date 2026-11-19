@@ -15,6 +15,8 @@ static uint32_t     data_period_ms = NODE_DATA_PERIOD_MS;
 static uint32_t     acq_period_ms  = NODE_PERIOD_MIN_MS;
 static uint32_t     last_data_ms;
 static int32_t      last_filtered;
+/* Tableau char initialise par une chaine (pas un pointeur) : faux positif 7.4 */
+// cppcheck-suppress misra-c2012-7.4
 static char         node_id[TN_ID_LEN] = "TN01";
 
 void node_set_id(const char *id)
@@ -185,7 +187,7 @@ void node_poll_commands(void)
             send_ack(cmd, "nack", "range");
         }
     } else if (strcmp(cmd, "set_period") == 0) {
-        if ((value >= 1) && (value <= 60)) {
+        if ((value >= 1) && (value <= (int32_t)NODE_PERIOD_MAX_S)) {
             acq_period_ms = (uint32_t)value * 1000u;
             send_ack(cmd, "ok", "");
         } else {
