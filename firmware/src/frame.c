@@ -92,7 +92,10 @@ bool json_get_int(const uint8_t *json, size_t len, const char *key, int32_t *val
     char pat[32];
     const char *p;
     (void)len;
-    snprintf(pat, sizeof pat, "\"%s\":", key);
+    int wr = snprintf(pat, sizeof pat, "\"%s\":", key);
+    if ((wr < 0) || ((size_t)wr >= sizeof pat)) {
+        return false;
+    }
     p = strstr((const char *)json, pat);
     if (p == NULL) {
         return false;
@@ -112,7 +115,10 @@ bool json_get_str(const uint8_t *json, size_t len, const char *key, char *out, s
     const char *e;
     size_t n;
     (void)len;
-    snprintf(pat, sizeof pat, "\"%s\":\"", key);
+    int wr = snprintf(pat, sizeof pat, "\"%s\":\"", key);
+    if ((wr < 0) || ((size_t)wr >= sizeof pat)) {
+        return false;
+    }
     p = strstr((const char *)json, pat);
     if (p == NULL) {
         return false;
