@@ -45,7 +45,7 @@ size_t frame_build(uint8_t *out, size_t cap, const frame_t *f)
     n = snprintf(payload, sizeof payload,
                  "{\"id\":\"%s\",\"seq\":%lu,\"t\":%lu,\"temp\":%s%ld.%02ld,\"state\":\"%s\"}",
                  f->id, (unsigned long)f->seq, (unsigned long)f->t,
-                 sign, (long)(a / 100), (long)(a % 100), state_name(f->state));
+                 sign, ((long)a / 100), ((long)a % 100), state_name(f->state));
     if ((n <= 0) || ((size_t)n >= sizeof payload)) {
         return 0u;
     }
@@ -97,7 +97,8 @@ bool frame_crc_ok(const uint8_t *json, size_t len)
     if (p == NULL) {
         return false;
     }
-    pos = (size_t)(p - json);
+    ptrdiff_t d_pos = p - json;
+    pos = (size_t)d_pos;
     if ((pos + (sizeof(key) - 1u) + hexlen + 1u) > len) {
         return false;
     }
@@ -156,7 +157,8 @@ bool json_get_str(const uint8_t *json, size_t len, const char *key, char *out, s
     if (e == NULL) {
         return false;
     }
-    n = (size_t)(e - p);
+    ptrdiff_t d_n = e - p;
+    n = (size_t)d_n;
     if ((n + 1u) > cap) {
         return false;
     }
