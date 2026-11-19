@@ -1,6 +1,6 @@
 #include "convert.h"
 
-bool range_check(int32_t centi)
+static bool range_check(int32_t centi)
 {
     return (centi >= TN_TEMP_MIN_CENTI) && (centi < TN_TEMP_MAX_CENTI);
 }

@@ -5,7 +5,7 @@
 
 #define NODE_DATA_PERIOD_MS   10000u     /* EF-06 : trame de données toutes les 10 s */
 #define NODE_PERIOD_MIN_MS     1000u     /* EF-08 : période d'acquisition 1..60 s */
-#define NODE_PERIOD_MAX_MS    60000u
+#define NODE_PERIOD_MAX_S     60u
 
 void         node_init(int32_t high_centi, int32_t hyst_centi);
 void         node_set_id(const char *id);
