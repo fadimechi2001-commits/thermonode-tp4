@@ -114,12 +114,12 @@ La passerelle Python est mesurée par Sonar (rapport `coverage-gw.xml`). Le firm
 **Q5 : versionnement sémantique.**
 `v0.2.0` est une version mineure : elle ajoute des fonctionnalités (configuration de l'hystérésis, outillage qualité) sans rupture de compatibilité. La correction d'un seul défaut sans changement d'interface relève d'une version corrective, `0.1.1`. Le jour où l'ICD change le format de trame, la compatibilité avec les nœuds et la passerelle existants est rompue : c'est une version majeure, `1.0.0`.
 
-## 8. Dette technique restante
+## 8. Dette technique et plan d'action
 
-- Couverture du firmware non mesuree : SonarQube Community ne lit pas les resultats Unity du firmware, d'ou une couverture globale affichee a 0,0 %. Action : integrer gcov/lcov dans un rapport externe.
-- Defaut R1727 dans `gateway/gateway/handler.py` (condition constante) : la detection de doublon est desactivee par `pylint: disable`. A corriger.
-- Derogations MISRA DEV-002, DEV-004, DEV-005 et DEV-006 : a valider par l'enseignant, et a reduire a terme.
-- Tests smoke de la gateway (`gateway/tests/smoke`) exclus : ils necessitent `GATEWAY_URL` et `MQTT_HOST` de staging.
+- Couverture du firmware non mesuree : SonarQube Community ne lit pas les resultats Unity. Action : integrer gcov/lcov dans un rapport externe.
+- Defaut R1727 dans gateway/gateway/handler.py : detection de doublon desactivee par pylint disable. A corriger.
+- Derogations MISRA DEV-002, DEV-004, DEV-005, DEV-006 : a valider par l'enseignant, et a reduire a terme.
+- Tests smoke de la gateway exclus : ils necessitent GATEWAY_URL et MQTT_HOST de staging.
 - Un code smell residuel ; conditions du nouveau code ignorees par la Quality Gate.
 
 ## 9. Références
