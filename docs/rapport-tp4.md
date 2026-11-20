@@ -111,7 +111,11 @@ La passerelle Python est mesurée par Sonar (rapport `coverage-gw.xml`). Le firm
 
 ## 8. Dette technique et plan d'action
 
-[À COMPLÉTER : dette restante (dérogations en attente, défaut R1727, format d'import déprécié, tests smoke à brancher sur la staging) avec priorité et responsable proposé.]
+- Couverture du firmware non mesuree : SonarQube Community ne lit pas les resultats Unity. Action : integrer gcov/lcov dans un rapport externe.
+- Defaut R1727 dans gateway/gateway/handler.py : detection de doublon desactivee par pylint disable. A corriger.
+- Derogations MISRA DEV-002, DEV-004, DEV-005, DEV-006 : a valider par l'enseignant, et a reduire a terme.
+- Tests smoke de la gateway exclus : ils necessitent GATEWAY_URL et MQTT_HOST de staging.
+- Un code smell residuel ; conditions du nouveau code ignorees par la Quality Gate.
 
 ## 9. Références
 
