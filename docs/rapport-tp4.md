@@ -53,19 +53,15 @@ Le nombre de violations visibles, relevé par cppcheck avec l'addon MISRA, est p
 
 Le bilan final de l'analyse (commit 5f3416d) recense ces 64 violations initiales et leur traitement.
 
-## 4. Analyse SonarQube (Partie 3)
+## 4. Quality Gate SonarQube
 
-**Mise en place.** La plateforme est lancée par `ci/platform.compose.yaml`. Le réseau externe `ci` a dû être créé, et la variable `vm.max_map_count` portée à 262144, comme l'exige le moteur Elasticsearch embarqué. Le projet `thermonode` est créé en local. Le token d'analyse est généré par l'interface et stocké hors du dépôt, dans un fichier réservé à l'utilisateur.
+Analyse lancee sur `main` (commit 3c77188) : scan reussi (EXECUTION SUCCESS). La gate **TVD** est assignee au projet `thermonode` (verifie par l'API `get_by_project`).
 
-**Scan.** Le scan est exécuté avec sonar-scanner-cli dans un conteneur, sur le réseau hôte. Résultats :
+Conditions de la gate (section 3.6) : couverture du nouveau code < 80 %, bugs du nouveau code > 0, vulnerabilites du nouveau code > 0, hotspots revus du nouveau code < 100 %, duplication du nouveau code > 3 %, maintenabilite du nouveau code > 1 (note A).
 
-- les 11 fichiers Python sont analysés par l'analyseur natif, avec la couverture et les tests fournis par `reports/` ;
-- le rapport cppcheck est importé au format « generic issue » (`reports/cppcheck-sonar.json`) : aucune violation à importer, ce qui est cohérent avec la section 3 ;
-- le format d'import est déprécié (champ `rules` absent) ; ce point est à corriger pour une version future de SonarQube.
+Resultat : statut **OK**, toutes les conditions evaluees sont OK. Reserve : `ignoredConditions` est vrai, donc certaines conditions sur le nouveau code n'ont pas ete evaluees, faute de periode de reference exploitable. Le statut OK doit etre lu avec cette reserve.
 
-**Limite.** L'édition Community n'embarque pas d'analyseur C natif. Les fichiers C sont donc exclus de l'analyse (`sonar.c.file.suffixes=-`) et seule l'importation cppcheck les concerne. Les options B et C du fichier `sonar-project.properties` (plugin communautaire, édition Developer) n'ont pas été retenues.
-
-**Quality Gate.** [À COMPLÉTER : conditions de la porte TVD telles que définies à la section 3.6 de l'énoncé, valeurs seuils, et statut obtenu après le scan final.]
+Metriques du projet entier : 196 lignes de code ; 0 bug ; 0 vulnerabilite ; 0 hotspot ; 1 code smell ; duplication 0,0 % ; couverture 0,0 % (le firmware C n'est pas mesure par SonarQube Community, voir Q3) ; notes de fiabilite, de securite et de maintenabilite a A.
 
 ## 5. Qualité de la passerelle Python
 
@@ -75,11 +71,20 @@ Le score pylint de `gateway/gateway` est passé de **8,85 à 9,90 / 10**, avec l
 
 **Tests.** Les tests unitaires de la passerelle réussissent. Les tests de fumée (`gateway/tests/smoke/`) ne sont pas unitaires : ils vérifient un déploiement et lisent `GATEWAY_URL` et `MQTT_HOST`. Sans passerelle à l'adresse configurée, ils échouent, y compris sur `main`. Ils sont donc exclus de l'exécution unitaire (`--ignore=gateway/tests/smoke`).
 
-## 6. Git, revue croisée et versionnement (Partie 4)
+## 6. Historique Git et livraison
 
-[À COMPLÉTER après la publication des branches : URL du dépôt distant, liens des trois merge requests, revue croisée (reviewer et constats), résolution du conflit sur `THR_DEFAULT_HYST` (valeur conservée : 400, avec commentaire « hystérésis EF-04 »), tag `v0.2.0` et sortie de `git describe --tags`.]
+Depot : fadimechi2001-commits/thermonode-tp4. La revue de la MR EF-04 est dans `docs/review-MR7.md` ; decision : Demander des changements.
 
-**Versionnement.** La version `v0.2.0` est une version mineure (nouvelles fonctionnalités rétrocompatibles). Un changement du format de trame ICD serait une version majeure, car il casse la compatibilité.
+Pull requests :
+- #1 et #2 : corrections MISRA et pylint.
+- #3 : `docs/deviations` ; conflit resolu en alignant le fichier sur `main`.
+- #4 : `feat/threshold-defaults-doc`, seuil d'hysteresis a 400 (conflit simule).
+- #5 : `docs/rapport-tp4`, rapport et reponses Q1 a Q5.
+- #6 : `docs/git-history`, ajout de `docs/git-history.txt`.
+
+Conflit simule : rebase de `feat/threshold-defaults-doc` sur `fix/threshold-300`. Conflit sur `THR_DEFAULT_HYST` dans `firmware/src/threshold.h`, resolu en gardant 400 (valeur retour terrain EF-04), puis `git add` et `git rebase --continue`.
+
+Tag : `v0.2.0` pose sur `main` (commit 3c77188) et pousse ; `git describe --tags` retourne `v0.2.0`.
 
 ## 7. Réponses aux questions Q1 à Q5
 
@@ -109,9 +114,13 @@ La passerelle Python est mesurée par Sonar (rapport `coverage-gw.xml`). Le firm
 **Q5 : versionnement sémantique.**
 `v0.2.0` est une version mineure : elle ajoute des fonctionnalités (configuration de l'hystérésis, outillage qualité) sans rupture de compatibilité. La correction d'un seul défaut sans changement d'interface relève d'une version corrective, `0.1.1`. Le jour où l'ICD change le format de trame, la compatibilité avec les nœuds et la passerelle existants est rompue : c'est une version majeure, `1.0.0`.
 
-## 8. Dette technique et plan d'action
+## 8. Dette technique restante
 
-[À COMPLÉTER : dette restante (dérogations en attente, défaut R1727, format d'import déprécié, tests smoke à brancher sur la staging) avec priorité et responsable proposé.]
+- Couverture du firmware non mesuree : SonarQube Community ne lit pas les resultats Unity du firmware, d'ou une couverture globale affichee a 0,0 %. Action : integrer gcov/lcov dans un rapport externe.
+- Defaut R1727 dans `gateway/gateway/handler.py` (condition constante) : la detection de doublon est desactivee par `pylint: disable`. A corriger.
+- Derogations MISRA DEV-002, DEV-004, DEV-005 et DEV-006 : a valider par l'enseignant, et a reduire a terme.
+- Tests smoke de la gateway (`gateway/tests/smoke`) exclus : ils necessitent `GATEWAY_URL` et `MQTT_HOST` de staging.
+- Un code smell residuel ; conditions du nouveau code ignorees par la Quality Gate.
 
 ## 9. Références
 
